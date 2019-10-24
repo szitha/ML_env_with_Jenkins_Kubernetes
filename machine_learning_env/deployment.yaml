@@ -1,0 +1,27 @@
+# This is your Editor pane.
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: docker-image
+spec:
+  replicas: 1
+  template:
+    metadata:
+      creationTimestamp:null
+      labels:
+        name: docker-image
+        app: docker-image
+
+    spec:
+      restartPolicy: never
+      containers:
+        - name: docker-image-container
+          image: 'dockerhubaddress/cib/ml_tools:latest'
+          imagePullPolicy:always
+          ports:
+            - name: http-port
+              containerPort: 8888
+            - name: jupyter-port
+              containerPort: 6006
+ 
+       

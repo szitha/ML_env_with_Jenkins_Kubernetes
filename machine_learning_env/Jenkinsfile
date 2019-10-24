@@ -1,0 +1,40 @@
+node {
+
+    def app
+
+    stage('Clone repository') {
+
+        /* Let's make sure we have the repository cloned to our workspace */ 
+
+        checkout scm
+
+    }
+
+    stage('Build image') {
+      
+
+      def dockerfile = 'Dockerfile'
+      
+      def notebook_port = '8888:8888'
+      def container_port = '6006:6006'
+    
+      app = docker.build("cib/ml_tools:${env.BUILD_ID}",  "-f ${dockerfile} . ")
+
+    }
+    
+      stage("Push image"){
+        docker.withRegistry('http://dockerhubaddress'){
+            app.push("${env.BUILD_ID}")
+            app.push("latest")
+        }
+      }
+    /*stage('pulling image') {
+
+        app.pull()
+
+
+        }*/
+
+    
+
+}
